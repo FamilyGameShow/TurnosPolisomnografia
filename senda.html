@@ -1,111 +1,95 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SENDA - Ficha Real</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENDA - Turnos PSG</title>
 <style>
-body{margin:0;font-family:system-ui;background:#f8fafc}
-.top{background:#1e3a8a;color:white;padding:14px 20px;font-weight:bold}
-.tabs{display:flex;gap:6px;padding:10px;background:white;border-bottom:1px solid #e2e8f0}
-.tab{padding:8px 14px;border-radius:20px;border:1px solid #cbd5e0;cursor:pointer;font-size:13px;background:white}
-.tab.active{background:#1e3a8a;color:white}
-.content{padding:16px;max-width:1100px;margin:0 auto}
-.card{background:white;border-radius:12px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:14px}
-h3{margin:0 0 10px 0;color:#1e3a8a}
-h4{margin:14px 0 6px 0;color:#334155;font-size:13px;text-transform:uppercase}
-input,select,textarea{width:100%;padding:9px;border:1px solid #cbd5e0;border-radius:8px;box-sizing:border-box;margin:3px 0;font-size:13px}
-.row{grid-template-columns:1fr 1fr 1fr;display:grid;gap:10px}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.btn{padding:11px 18px;border-radius:8px;border:none;font-weight:bold;cursor:pointer}
-.btn-green{background:#25D366;color:white}
-.btn-blue{background:#2563eb;color:white}
-.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;margin-right:4px}
-.whatsapp{background:#dcf8c6;border-left:4px solid #25D366;padding:10px;border-radius:8px;margin-top:10px;font-size:12px}
+body{font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;padding:16px;background:#f6f7f8}
+.card{background:white;border-radius:16px;padding:16px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:700;margin:6px 0;cursor:pointer}
+.btn-primary{background:#111;color:white}
+.btn-sec{background:#e9ecef}
+.btn-outline{border:2px solid #111;background:white}
+.slot{padding:10px;border:1px solid #ddd;border-radius:10px;margin:6px 0;cursor:pointer}
+.slot.sel{background:#111;color:white}
+.small{font-size:12px;color:#666}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #ddd;margin:6px 0;box-sizing:border-box}
 </style>
 </head>
 <body>
-<div class="top">SENDA • Ficha real - Pedido de turno + Datos cuando viene</div>
-<div class="tabs">
-<div class="tab active" onclick="show(0)">1. Pedido de Turno (paciente)</div>
-<div class="tab" onclick="show(1)">2. Cuando viene (vos)</div>
-<div class="tab" onclick="show(2)">3. Lista colores Excel</div>
-</div>
-<div class="content">
-<div id="t0">
-<div class="card">
-<h3>1. PEDIDO DE TURNO - Datos que llena paciente / secretaria</h3>
-<h4>Identificación</h4>
-<div class="row"><div><label>Apellido</label><input id="ape" placeholder="RIMARO"></div><div><label>Nombre</label><input id="nom" placeholder="Mariano"></div><div><label>DNI</label><input placeholder="30123456"></div></div>
-<div class="row"><div><label>Fecha Nac.</label><input type="date"></div><div><label>Edad (auto)</label><input placeholder="56"></div><div><label>Celular</label><input placeholder="221 555..."></div></div>
-<div class="row2"><div><label>Dirección</label><input placeholder="Calle 7 nro..."></div><div><label>Localidad</label><input placeholder="La Plata"></div></div>
+<h2>SENDA La Plata - Turnos</h2>
 
-<h4>Turno</h4>
-<div class="row"><div><label>Fecha turno solicitada</label><input type="date"></div><div><label>Hora</label><input type="time"></div><div><label>Obra Social</label><input placeholder="OSDE / IOMA / Particular"></div></div>
-
-<h4>Clínico</h4>
-<div class="row"><div><label>Peso kg</label><input placeholder="85"></div><div><label>Talla cm</label><input placeholder="175"></div><div><label>Médico que solicita</label><input placeholder="Dr...."></div></div>
-<div><label>Diagnóstico / Motivo</label><input placeholder="Ronquidos, HTA, somnolencia"></div>
-<div><label>Medicación actual</label><textarea rows="2" placeholder="Enalapril 10mg,..."></textarea></div>
-
-<button class="btn btn-green" onclick="show(1)">Enviar → Pasa a 'Cuando viene' + WhatsApp a vos</button>
-<div class="whatsapp">📱 WhatsApp a vos: <b>Nuevo pedido: RIMARO Mariano - 56a - 221... - OSDE - Fecha 02/09 14hs - Peso 85 Talla 175 - Medico: Dr X - Diagn: Ronquidos</b></div>
-</div>
+<div id="paso1" class="card">
+  <b>1. ¿Qué estudio?</b>
+  <button class="btn btn-primary" onclick="setTipo('DIU_NOC')">PSG Diurno/Nocturno</button>
+  <div class="small">Lun, Mar, Jue - 21hs / 23hs / 01hs / 03hs</div>
+  <button class="btn btn-primary" style="margin-top:12px" onclick="setTipo('RESP')">PSG Respiratoria</button>
+  <div class="small">Lun, Mar, Vie 23hs + Dom 23hs</div>
+  <button class="btn btn-outline" style="margin-top:12px" onclick="setTipo('DOM')">Domicilio noche - A convenir</button>
+  <div id="prox" class="small" style="margin-top:10px;font-weight:700"></div>
 </div>
 
-<div id="t1" style="display:none">
-<div class="card">
-<h3>2. CUANDO VIENE EL PACIENTE - Lo llenás vos en SENDA</h3>
-<h4>Datos SENDA</h4>
-<div class="row"><div><label>Lugar</label><select><option>SENDA La Plata</option><option>Domicilio</option><option>Otro</option></select></div><div><label>Colaboración</label><select><option>Colabora</option><option>Colabora poco</option><option>No colabora</option></select></div><div><label>Protocolo</label><select><option>Completo</option><option>Incompleto - sensor suelto</option></select></div></div>
-
-<div class="row"><div><label>Quien informa</label><select id="informa"><option>SABRINA</option><option>FITO</option><option>FITO-SABRI</option></select></div><div><label>Número de estudio</label><input id="num" value="1376" placeholder="1376 → auto 1376/02 si es control"><small style="color:#2563eb">Si ya existe 1376, genera 1376/02 y 1376/03 solo</small></div><div><label>Urgente</label><select><option>No</option><option>Sí - Urgente</option></select></div></div>
-
-<h4>Sensores (tu checklist de la foto)</h4>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;font-size:12px">
-<label><input type="checkbox" checked> EKG</label><label><input type="checkbox" checked> Oximetría</label><label><input type="checkbox" checked> EMG mentón</label><label><input type="checkbox" checked> EOG</label>
-<label><input type="checkbox" checked> Banda Tórax</label><label><input type="checkbox" checked> Banda Abdomen</label><label><input type="checkbox"> Ronquido</label><label><input type="checkbox"> Flujo nasal</label>
-<label><input type="checkbox"> Termistor</label><label><input type="checkbox"> Video</label><label><input type="checkbox"> Foto</label><label><input type="checkbox"> Peso/Talla verif.</label>
+<div id="paso2" class="card" style="display:none">
+  <b>2. Fechas disponibles - <span id="tipoLabel"></span></b>
+  <div id="slots"></div>
+  <button class="btn btn-sec" onclick="volver1()">← Cambiar tipo</button>
 </div>
 
-<h4>Si es NIÑOS (opcional)</h4>
-<div class="row"><div><input placeholder="Edad gestacional"></div><div><input placeholder="Peso al nacer"></div><div><input placeholder="Mail padres"></div></div>
+<div id="paso3" class="card" style="display:none">
+  <b>3. Reserva rápida</b>
+  <div class="small" id="resumenTurno"></div>
+  <input id="nombre" placeholder="Apellido y Nombre*">
+  <input id="whatsapp" placeholder="WhatsApp*">
+  <input id="dni" placeholder="DNI">
+  <button class="btn btn-primary" onclick="guardarReserva()">Reservar</button>
+</div>
 
-<button class="btn btn-blue" onclick="guardar()">Guardar estudio → WhatsApp 'Listo para informar'</button>
-<div id="msg2" class="whatsapp" style="display:none"></div>
+<div id="paso4" class="card" style="display:none">
+  <b>4. Ficha completa</b>
+  <div class="grid2"><input id="fechanac" placeholder="Fecha nac."><input id="edad" placeholder="Edad"></div>
+  <input id="obra" placeholder="Obra social">
+  <input id="direccion" placeholder="Dirección"><input id="localidad" placeholder="Localidad">
+  <div class="grid2"><input id="peso" placeholder="Peso kg"><input id="talla" placeholder="Talla"></div>
+  <input id="medico" placeholder="Médico solicita"><input id="diag" placeholder="Diagnóstico">
+  <textarea id="meds" placeholder="Medicación"></textarea>
+  <input type="file" id="ordenFoto">
+  <button class="btn btn-primary" onclick="finalizarFicha()">Enviar y generar comprobante</button>
+</div>
 
-<table id="tabla" style="width:100%;margin-top:12px;font-size:13px;border-collapse:collapse"><tr style="color:#64748b;font-size:11px"><th>APELLIDO NOMBRE</th><th>Nº</th><th>INFORMA</th><th>LUGAR</th><th>SENSORES</th></tr></table>
-</div>
+<div id="paso5" class="card" style="display:none">
+  <b>✅ Solicitud enviada</b>
+  <div id="comprobante"></div>
+  <button class="btn btn-primary" onclick="alert('PDF SENDA generado')">Descargar PDF</button>
+  <div class="grid2">
+    <button class="btn btn-sec" onclick="cambiarTurno()">Cambiar turno</button>
+    <button class="btn btn-outline" onclick="suspenderTurno()">Suspender turno</button>
+  </div>
 </div>
 
-<div id="t2" style="display:none">
-<div class="card">
-<h3>3. LISTA - Igual a tu Excel con colores</h3>
-<table style="width:100%;font-size:13px;border-collapse:collapse">
-<tr><th>PACIENTE</th><th>Nº</th><th>INFORMA</th><th>URG</th><th>ESTADO</th></tr>
-<tr style="background:#ffe4e6"><td>RIMARO M. 56a</td><td>1376</td><td><span class="tag" style="background:#064e3b;color:white">SABRINA</span></td><td>-</td><td>✓ SAHOS LEVE</td></tr>
-<tr style="background:#d1fae5"><td>RIMARO M. 56a</td><td>1376/02</td><td><span class="tag" style="background:#a7f3d0;color:#064e3b">FITO-SABRI</span></td><td>Sí</td><td>Por informar - sens OK</td></tr>
-</table>
+<div id="panelAdmin" class="card" style="border:2px dashed #111">
+  <b>PANEL SEBA (orden por fecha de turno)</b>
+  <input id="adminNum" placeholder="Nº ATI manual (ej: 1376 o notebook domicilio 210)">
+  <select id="adminLugar"><option>SENDA La Plata</option><option>Domicilio</option></select>
+  <select id="adminColab"><option>Colabora</option><option>Colabora poco</option><option>No colabora</option></select>
+  <select id="adminProto"><option>Protocolo N3</option><option>Halo + parasaj</option><option>Frontales Sabri</option><option>Completo habitual</option><option>Incompleto</option></select>
+  <select id="adminInforma"><option>SABRINA</option><option>FITO</option><option>FITO-SABRI</option></select>
+  <label><input type="checkbox" id="adminUrg"> Urgente</label>
+  <textarea id="adminSensores" placeholder="Sensores"></textarea>
+  <button class="btn btn-primary" onclick="alert('Guardado Nº manual')">Guardar</button>
 </div>
-</div>
-</div>
+
 <script>
-let base={'RIMARO':['1376']};
-function show(i){
-document.getElementById('t0').style.display=i==0?'block':'none';
-document.getElementById('t1').style.display=i==1?'block':'none';
-document.getElementById('t2').style.display=i==2?'block':'none';
-document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx==i));
-}
-function guardar(){
-const ape=document.getElementById('ape').value.toUpperCase()||'RIMARO';
-const numBase=document.getElementById('num').value.split('/')[0];
-const inf=document.getElementById('informa').value;
-let nuevo=numBase;
-if(base[ape]){nuevo=numBase+'/'+String(base[ape].length+1).padStart(2,'0'); base[ape].push(nuevo)} else base[ape]=[nuevo];
-document.getElementById('msg2').style.display='block';
-document.getElementById('msg2').innerHTML='📱 WhatsApp a vos: <b>Estudio '+nuevo+' '+ape+' listo. Lugar: SENDA. Informa: '+inf+'. Checklist sens: OK. Listo para informar</b>';
-const tab=document.getElementById('tabla'); const tr=document.createElement('tr'); tr.innerHTML='<td>'+ape+'</td><td>'+nuevo+'</td><td>'+inf+'</td><td>SENDA</td><td>EKG,Ox,Torax,Abd</td>'; tab.appendChild(tr);
-}
+let tipo='',turnoSel='';
+const horarios={DIU_NOC:{dias:[1,2,4],horas:['21:00','23:00','01:00','03:00']},RESP:{dias:[1,2,5,0],horas:['23:00']}}
+function setTipo(t){tipo=t;document.getElementById('paso1').style.display='none';document.getElementById('paso2').style.display='block';document.getElementById('tipoLabel').innerText=t;document.getElementById('slots').innerHTML='';if(t==='DOM'){const d=document.createElement('div');d.className='slot sel';d.innerText='Domicilio - A convenir';d.onclick=()=>elegirSlot(d.innerText);document.getElementById('slots').appendChild(d);elegirSlot('Domicilio - A convenir');return;}const hoy=new Date();let c=0;for(let k=0;k<21&&c<12;k++){const f=new Date();f.setDate(hoy.getDate()+k);if(!horarios[t].dias.includes(f.getDay()))continue;horarios[t].horas.forEach(h=>{const txt=f.toLocaleDateString('es-AR',{weekday:'short',day:'2-digit',month:'2-digit'})+' '+h;const div=document.createElement('div');div.className='slot';div.innerText=txt;div.onclick=(e)=>{document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel'));e.target.classList.add('sel');elegirSlot(txt)};document.getElementById('slots').appendChild(div);c++})}}
+function elegirSlot(txt){turnoSel=txt;document.getElementById('paso2').style.display='none';document.getElementById('paso3').style.display='block';document.getElementById('resumenTurno').innerText=tipo+' - '+txt;}
+function volver1(){document.getElementById('paso2').style.display='none';document.getElementById('paso1').style.display='block';}
+function guardarReserva(){if(!nombre.value||!whatsapp.value){alert('Falta nombre/WhatsApp');return;}document.getElementById('paso3').style.display='none';document.getElementById('paso4').style.display='block';}
+function finalizarFicha(){document.getElementById('paso4').style.display='none';document.getElementById('paso5').style.display='block';comprobante.innerHTML=nombre.value+'<br>'+tipo+' - '+turnoSel;}
+function cambiarTurno(){document.getElementById('paso5').style.display='none';document.getElementById('paso2').style.display='block';}
+function suspenderTurno(){if(confirm('¿Suspender?'))location.reload();}
 </script>
 </body>
 </html>
