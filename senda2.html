@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENDA COMUNIDAD - Turnos</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+body{font-family:system-ui,sans-serif;max-width:620px;margin:0 auto;padding:12px;background:#f2f2f2}
+.card{background:#fff;border-radius:16px;padding:16px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;margin:6px 0;cursor:pointer;font-size:15px}
+.btn-p{background:#111;color:#fff}.btn-s{background:#e9ecef}.btn-o{border:2px solid #111;background:#fff}
+.slot{padding:14px;border:1px solid #ddd;border-radius:10px;margin:8px 0;cursor:pointer;font-weight:700;background:#fff}
+.slot.sel{background:#111;color:#fff}
+.small{font-size:12px;color:#666}
+input,select,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #ccc;margin:6px 0;box-sizing:border-box}
+.turno-preview{border:10px solid #00c800;padding:12px;background:white}
+.borde-negro{border:3px solid black;padding:8px;margin:8px 0;text-align:center;font-weight:900;font-size:20px}
+.borde-rojo{border:3px solid red;padding:10px;margin:8px 0;font-size:12px}
+#linkEquipo{font-size:11px;color:#999;text-align:center;margin-top:20px;cursor:pointer;text-decoration:underline}
+</style>
+</head>
+<body>
+<h2>SENDA COMUNIDAD - Turnos</h2>
+<div id="p1" class="card">
+<b>1. ¿Qué estudio?</b>
+<button class="btn btn-p" onclick="setTipo('DIU_NOC')">PSG Diurno / Nocturno</button><div class="small">Lunes, Martes y Jueves 21/23/01/03hs</div>
+<button class="btn btn-p" style="margin-top:12px" onclick="setTipo('RESP')">PSG Respiratoria</button><div class="small">Lunes, Martes y Viernes 23hs + Dom 23hs</div>
+<button class="btn btn-o" style="margin-top:12px" onclick="setTipo('DOM')">Domicilio noche - A convenir</button>
+</div>
+<div id="p2" class="card" style="display:none"><b>2. Fechas</b><div id="slots" style="margin-top:10px"></div><button class="btn btn-s" onclick="location.reload()">← Volver</button></div>
+<div id="p3" class="card" style="display:none"><b>3. Reserva</b><div class="small" id="resTurno"></div><input id="nombre" placeholder="Apellido y Nombre*"><input id="whatsapp" placeholder="WhatsApp*"><button class="btn btn-p" onclick="irFicha()">Reservar</button></div>
+<div id="p4" class="card" style="display:none"><b>4. Datos</b><input id="obra" placeholder="Obra social"><button class="btn btn-p" onclick="finalizar()">Generar comprobante</button></div>
+<div id="p5" class="card" style="display:none">
+<b>✅ Turno reservado</b>
+<div class="turno-preview">
+<div style="display:flex;justify-content:space-between"><span style="color:#0d7c6a;font-weight:900">SENDA<br>COMUNIDAD</span><span style="font-size:11px">TURNO PARA ESTUDIO NEUROLOGICO</span></div>
+<div id="pv_dia" class="borde-negro"></div><div id="pv_hora" class="borde-negro"></div><div id="pv_lugar" class="borde-negro" style="font-size:16px"></div>
+<div class="small" style="text-align:center">Avisar con anticipacion si no puede concurrir</div>
+<div class="borde-rojo">El dia del estudio:<br>- pelo lavado seco sin crema<br>- sin esmalte<br>- privación de sueño<br>- <b>orden autorizada (IOMA NO SE AUTORIZA)</b></div>
+<div style="font-size:9px;margin-top:8px">EL INFORME SERA ENVIADO DENTRO DE LOS 10 A 15 DIAS EN PDF.</div>
+<div style="text-align:right;font-weight:900;margin-top:10px">TEL: 2215983871</div>
+<div style="font-size:12px">Paciente: <span id="pv_paciente"></span></div>
+</div>
+<button class="btn btn-p" onclick="descargarPDF()">Descargar PDF verde</button>
+<div id="linkEquipo" onclick="loginEquipo()">Ingreso equipo SENDA - clave 1321</div>
+<div id="admin" style="display:none;margin-top:18px;border-top:2px dashed #111;padding-top:12px">
+<b>PANEL EQUIPO (1321)</b>
+<select id="quien"><option>SEBA J</option><option>SABRINA</option><option>FITO</option><option>SEBA D</option><option>SEBA SECRE</option><option>JULIETA</option></select>
+<input id="numATI" placeholder="Nº ATI manual">
+<select id="lugarA"><option>SENDA La Plata - 56 N°1321</option><option>Domicilio</option></select>
+<select id="colab"><option>Colabora</option><option>Colabora poco</option><option>No colabora</option></select>
+<select id="proto"><option>Protocolo N3</option><option>Halo + parasaj</option><option>Frontales Sabri</option><option>Completo habitual</option><option>Incompleto</option></select>
+<select id="informa"><option>SABRINA</option><option>FITO</option><option>FITO-SABRI</option></select>
+<label class="small"><input type="checkbox" id="urg"> Urgente</label>
+<textarea id="sens" placeholder="Sensores"></textarea>
+<button class="btn btn-p" onclick="guardarAdmin()">Guardar y WhatsApp</button>
+</div>
+</div>
+<script>
+let tipo='',turnoSel='',fechaObj=null,horaSel='';
+const cfg={DIU_NOC:{dias:[1,2,4],horas:['21:00','23:00','01:00','03:00']},RESP:{dias:[1,2,5,0],horas:['23:00']}};
+function setTipo(t){tipo=t;p1.style.display='none';p2.style.display='block';tipoLab.innerText=t;generar();}
+function generar(){slots.innerHTML=''; if(tipo==='DOM'){let d=document.createElement('div'); d.className='slot sel'; d.innerText='DOMICILIO - A convenir'; d.onclick=()=>selTurno('DOMICILIO','A convenir',null); slots.appendChild(d); selTurno('DOMICILIO','A convenir',null); return;} let hoy=new Date(),c=0; for(let k=0;k<45&&c<30;k++){let f=new Date(); f.setDate(hoy.getDate()+k); if(!cfg[tipo].dias.includes(f.getDay())) continue; cfg[tipo].horas.forEach(h=>{let dias=['DOM','LUN','MAR','MIE','JUE','VIE','SAB']; let txt=dias[f.getDay()]+' '+f.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' '+h+'hs'; let div=document.createElement('div'); div.className='slot'; div.innerText=txt; div.onclick=e=>{document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel')); e.target.classList.add('sel'); selTurno(txt,h,f)}; slots.appendChild(div); c++;});}}
+function selTurno(txt,h,f){turnoSel=txt;horaSel=h;fechaObj=f;p2.style.display='none';p3.style.display='block';resTurno.innerText=txt;}
+function irFicha(){if(!nombre.value||!whatsapp.value){alert('Falta Nombre y WA');return;} p3.style.display='none';p4.style.display='block';}
+function finalizar(){p4.style.display='none';p5.style.display='block'; let diasL=['DOMINGO','LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO']; let dTxt=tipo==='DOM'?'DIA: DOMICILIO A CONVENIR':'DIA: '+(fechaObj?diasL[fechaObj.getDay()]+' '+fechaObj.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' a la noche':''); pv_dia.innerText=dTxt; pv_hora.innerText='HORA: '+(horaSel||'A convenir'); pv_lugar.innerText=tipo==='DOM'?'LUGAR: DOMICILIO':'LUGAR: 56 N° 1321 e/ 21 y 22'; pv_paciente.innerText=nombre.value;}
+function loginEquipo(){let c=prompt('Clave equipo:'); if(c==='1321'){admin.style.display='block';linkEquipo.style.display='none';}else if(c!==null)alert('Clave incorrecta');}
+function descargarPDF(){const{jsPDF}=window.jspdf; const doc=new jsPDF({unit:'mm',format:'a4'}); const W=210,H=297; doc.setFillColor(0,200,0); doc.rect(0,0,W,H,'F'); doc.setFillColor(255,255,255); doc.rect(5,5,W-10,H-10,'F'); doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(13,124,106); doc.text('SENDA',12,15); doc.text('COMUNIDAD',12,21); doc.setTextColor(0,0,0); doc.setFontSize(11); doc.setFont('helvetica','normal'); doc.text('TURNO PARA ESTUDIO NEUROLOGICO',70,18); function caja(y,t){doc.setDrawColor(0,0,0); doc.setLineWidth(0.8); doc.rect(10,y,W-20,18); doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text(t,15,y+12);} caja(30,pv_dia.innerText); caja(52,pv_hora.innerText); doc.setFontSize(12); doc.rect(10,74,W-20,14); doc.text(pv_lugar.innerText,12,83); doc.setFontSize(9); doc.text('En caso de no poder concurrir avisar con anticipacion',15,95); doc.setDrawColor(255,0,0); doc.rect(10,100,W-20,45); doc.text('El dia del estudio:',12,106); doc.text('- el pelo lavado, pero seco, sin crema',12,112); doc.text('- sin esmalte de uñas',12,118); doc.text('- privacion de sueño suficiente',12,124); doc.setFont('helvetica','bold'); doc.text('- orden autorizada por obra social (IOMA NO SE AUTORIZA)',12,130); doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.text('EL INFORME SERA ENVIADO DENTRO DE LOS 10 A 15 DIAS EN PDF',10,155); doc.setFont('helvetica','bold'); doc.text('TEL: 2215983871',130,170); doc.text('Paciente: '+nombre.value,10,178); doc.save('TURNO_SENDA_'+nombre.value.replace(/ /g,'_')+'.pdf');}
+function guardarAdmin(){let msg=`NUEVO SENDA (${quien.value}) - ${nombre.value} - ${turnoSel} - WA:${whatsapp.value} - NºATI:${numATI.value}`; window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg));}
+function cambiarTurno(){p5.style.display='none';p2.style.display='block';}
+function suspenderTurno(){window.open('https://wa.me/5492215983871?text='+encodeURIComponent('SUSPENDIDO: '+nombre.value+' '+turnoSel));}
+</script>
+</body>
+</html>
