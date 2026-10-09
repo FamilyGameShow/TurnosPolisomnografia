@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html><body style="font-family:sans-serif;padding:20px">
+<h1>TEST SENDA 1321</h1>
+<button onclick="alert('ANDA!')" style="padding:20px;font-size:20px;background:black;color:white;border-radius:10px">TOCA ACA</button>
+<div id="s"></div>
+<script>
+function p(t){
+document.getElementById('s').innerHTML='';
+for(let i=1;i<10;i++){
+let d=document.createElement('div');
+d.style='padding:12px;border:1px solid #ccc;margin:6px';
+d.innerText='FECHA '+i+' - '+t;
+d.onclick=function(){alert(this.innerText)};
+document.getElementById('s').appendChild(d);
+}
+}
+</script>
+<button onclick="p('DIURNO')" style="padding:15px;margin:10px">DIURNO</button>
+<button onclick="p('RESP')" style="padding:15px;margin:10px">RESP</button>
+</body></html>
