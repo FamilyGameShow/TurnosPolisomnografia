@@ -7,145 +7,88 @@
 <style>
 body{font-family:system-ui,sans-serif;max-width:620px;margin:0 auto;padding:12px;background:#f2f2f2}
 .card{background:#fff;border-radius:16px;padding:16px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;margin:6px 0;cursor:pointer;font-size:15px}
-.btn-p{background:#111;color:#fff}
-.btn-s{background:#e9ecef}
-.btn-o{border:2px solid #111;background:#fff}
-.slot{padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;cursor:pointer;font-weight:600}
-.slot.sel{background:#111;color:#fff}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-weight:800;margin:6px 0;cursor:pointer}
+.btn-p{background:#111;color:#fff}.btn-s{background:#e9ecef}.btn-o{border:2px solid #111;background:#fff}
+.slot{padding:12px;border:1px solid #ddd;border-radius:10px;margin:6px 0;cursor:pointer;font-weight:600}.slot.sel{background:#111;color:#fff}
 .small{font-size:12px;color:#555}
 input,select,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #ccc;margin:5px 0;box-sizing:border-box}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.turno-preview{border:10px solid #00c800;padding:12px;background:white;font-family:Arial, sans-serif}
+.turno-preview{border:10px solid #00c800;padding:12px;background:white}
 .borde-negro{border:3px solid black;padding:8px;margin:8px 0;text-align:center;font-weight:900;font-size:20px}
 .borde-rojo{border:3px solid red;padding:10px;margin:8px 0;font-size:12px}
 </style>
 </head>
 <body>
-<h2 style="margin:6px">SENDA COMUNIDAD - Turnos PSG</h2>
-
+<h2>SENDA COMUNIDAD - Turnos</h2>
 <div id="p1" class="card">
 <b>1. ¿Qué estudio?</b>
-<button class="btn btn-p" onclick="setTipo('DIU_NOC')">PSG Diurno/Nocturno</button>
-<div class="small">Lunes, Martes y Jueves 21hs / 23hs / 01hs / 03hs</div>
-<button class="btn btn-p" style="margin-top:10px" onclick="setTipo('RESP')">PSG Respiratoria</button>
-<div class="small">Lunes, Martes y Viernes 23hs + Domingos 23hs</div>
+<button class="btn btn-p" onclick="setTipo('DIU_NOC')">PSG Diurno/Nocturno</button><div class="small">Lun, Mar, Jue 21/23/01/03hs</div>
+<button class="btn btn-p" style="margin-top:10px" onclick="setTipo('RESP')">PSG Respiratoria</button><div class="small">Lun, Mar, Vie 23hs + Dom 23hs</div>
 <button class="btn btn-o" style="margin-top:10px" onclick="setTipo('DOM')">Domicilio noche - A convenir</button>
 </div>
-
-<div id="p2" class="card" style="display:none">
-<b>2. Fechas - <span id="tipoLab"></span></b>
-<div id="slots"></div>
-<button class="btn btn-s" onclick="location.reload()">← Cambiar tipo</button>
-</div>
-
-<div id="p3" class="card" style="display:none">
-<b>3. Reserva</b>
-<div class="small" id="resTurno"></div>
-<input id="nombre" placeholder="Apellido y Nombre*">
-<input id="whatsapp" placeholder="WhatsApp* 221...">
-<input id="dni" placeholder="DNI">
-<button class="btn btn-p" onclick="irFicha()">Reservar y seguir</button>
-</div>
-
-<div id="p4" class="card" style="display:none">
-<b>4. Ficha</b>
-<input id="obra" placeholder="Obra social / Particular">
-<input id="medico" placeholder="Médico solicita">
-<input id="diag" placeholder="Diagnóstico">
-<div class="grid2"><input id="peso" placeholder="Peso kg"><input id="talla" placeholder="Talla"></div>
-<textarea id="meds" placeholder="Medicación"></textarea>
-<button class="btn btn-p" onclick="finalizar()">Generar comprobante SENDA</button>
-</div>
-
+<div id="p2" class="card" style="display:none"><b>2. Fechas - <span id="tipoLab"></span></b><div id="slots"></div><button class="btn btn-s" onclick="location.reload()">← Cambiar tipo</button></div>
+<div id="p3" class="card" style="display:none"><b>3. Reserva</b><div class="small" id="resTurno"></div><input id="nombre" placeholder="Apellido y Nombre*"><input id="whatsapp" placeholder="WhatsApp*"><button class="btn btn-p" onclick="irFicha()">Reservar</button></div>
+<div id="p4" class="card" style="display:none"><b>4. Datos extra (opcional)</b><input id="obra" placeholder="Obra social"><input id="medico" placeholder="Médico"><button class="btn btn-p" onclick="finalizar()">Generar comprobante</button></div>
 <div id="p5" class="card" style="display:none">
 <b>✅ Turno reservado</b>
 <div id="preview" class="turno-preview">
-<div style="display:flex;justify-content:space-between"><span style="color:#0d7c6a;font-weight:900">SENDA<br>COMUNIDAD</span><span style="font-size:12px;margin-top:6px">TURNO PARA ESTUDIO NEUROLOGICO</span></div>
-<div id="pv_dia" class="borde-negro">DIA: MARTES 27/10 a la noche</div>
-<div id="pv_hora" class="borde-negro">HORA: 23hs</div>
-<div id="pv_lugar" class="borde-negro" style="font-size:16px">LUGAR: 56 N° 1321 e/ 21 y 22</div>
-<div class="small" style="text-align:center;margin:6px">En caso de no poder concurrir avisar con anticipacion para cambiar el turno</div>
-<div class="borde-rojo">El dia del estudio:<br>- el pelo lavado, pero seco, sin crema de enjuague ni otros productos<br>- sin esmalte de uñas<br>- privación de sueño suficiente como para dormir en el consultorio<br>- <b>orden autorizada por obra social (IOMA NO SE AUTORIZA)</b></div>
+<div style="display:flex;justify-content:space-between"><span style="color:#0d7c6a;font-weight:900">SENDA<br>COMUNIDAD</span><span style="font-size:12px">TURNO PARA ESTUDIO NEUROLOGICO</span></div>
+<div id="pv_dia" class="borde-negro">DIA:</div><div id="pv_hora" class="borde-negro">HORA:</div><div id="pv_lugar" class="borde-negro" style="font-size:16px">LUGAR:</div>
+<div class="small" style="text-align:center">En caso de no poder concurrir avisar con anticipacion para cambiar el turno</div>
+<div class="borde-rojo">El dia del estudio:<br>- el pelo lavado, pero seco, sin crema de enjuague<br>- sin esmalte de uñas<br>- privación de sueño suficiente<br>- <b>orden autorizada (IOMA NO SE AUTORIZA)</b></div>
 <div style="font-size:10px;margin-top:8px">EL INFORME SERA ENVIADO DENTRO DE LOS 10 A 15 DIAS, EN FORMATO PDF, POR FAVOR IMPRIMIRLO POR SI SE BORRA DE LOS MENSAJES.</div>
 <div style="text-align:right;font-weight:900;margin-top:10px">TEL: 2215983871</div>
 </div>
-<button class="btn btn-p" onclick="descargarPDF()">Descargar PDF (formato verde exacto)</button>
-<div class="grid2">
-<button class="btn btn-s" onclick="cambiarTurno()">Cambiar turno</button>
-<button class="btn btn-o" onclick="suspenderTurno()">Suspender</button>
-</div>
-<div id="admin" style="margin-top:16px;border-top:2px dashed #111;padding-top:10px">
-<b>PANEL SEBA</b><div class="small">Nº manual ATI - Orden por fecha</div>
-<input id="numATI" placeholder="Nº estudio ATI manual ej: 1376">
-<select id="lugarA"><option>SENDA La Plata - 56 N°1321</option><option>Domicilio</option></select>
+<button class="btn btn-p" onclick="descargarPDF()">Descargar PDF</button>
+<div class="grid2"><button class="btn btn-s" onclick="cambiarTurno()">Cambiar turno</button><button class="btn btn-o" onclick="suspenderTurno()">Suspender</button></div>
+
+<div id="admin" style="display:none;margin-top:16px;border-top:2px dashed #111;padding-top:10px">
+<b>PANEL SEBA (solo vos con?admin=seba)</b><div class="small">Orden por fecha de turno - Nº manual ATI</div>
+<input id="numATI" placeholder="Nº ATI manual ej: 1376"><select id="lugarA"><option>SENDA La Plata - 56 N°1321</option><option>Domicilio</option></select>
 <select id="colab"><option>Colabora</option><option>Colabora poco</option><option>No colabora</option></select>
 <select id="proto"><option>Protocolo N3</option><option>Halo + parasaj</option><option>Frontales Sabri</option><option>Completo habitual</option><option>Incompleto</option></select>
 <select id="informa"><option>SABRINA</option><option>FITO</option><option>FITO-SABRI</option></select>
 <label class="small"><input type="checkbox" id="urg"> Urgente</label>
-<button class="btn btn-p" onclick="guardarAdmin()">Guardar en planilla</button>
+<textarea id="sens" placeholder="Sensores"></textarea>
+<button class="btn btn-p" onclick="guardarAdmin()">Guardar + WhatsApp</button>
 </div>
 </div>
 
 <script>
+const params=new URLSearchParams(location.search); const isAdmin=params.get('admin')==='seba';
 let tipo='', turnoSel='', fechaObj=null, horaSel='';
 const cfg={DIU_NOC:{dias:[1,2,4],horas:['21:00','23:00','01:00','03:00']},RESP:{dias:[1,2,5,0],horas:['23:00']}};
 function setTipo(t){tipo=t;document.getElementById('p1').style.display='none';document.getElementById('p2').style.display='block';document.getElementById('tipoLab').innerText=t;generar();}
 function generar(){
  const cont=document.getElementById('slots'); cont.innerHTML='';
- if(tipo==='DOM'){
-   const d=document.createElement('div'); d.className='slot sel'; d.innerText='Domicilio - A convenir por WhatsApp'; d.onclick=()=>selTurno('DOMICILIO - A convenir','',null,'A convenir');
-   cont.appendChild(d); selTurno('DOMICILIO - A convenir','A convenir',null,'A convenir'); return;
- }
+ if(tipo==='DOM'){const d=document.createElement('div'); d.className='slot sel'; d.innerText='Domicilio - A convenir'; d.onclick=()=>selTurno('DOMICILIO - A convenir','A convenir',null,'A convenir'); cont.appendChild(d); selTurno('DOMICILIO - A convenir','A convenir',null,'A convenir'); return;}
  const hoy=new Date(); let c=0;
- for(let k=0;k<30&&c<20;k++){
-  const f=new Date(); f.setDate(hoy.getDate()+k); if(!cfg[tipo].dias.includes(f.getDay())) continue;
-  cfg[tipo].horas.forEach(h=>{const dias=['DOM','LUN','MAR','MIE','JUE','VIE','SAB']; const txt=dias[f.getDay()]+' '+f.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' '+h+'hs'; const div=document.createElement('div'); div.className='slot'; div.innerText=txt; div.onclick=(e)=>{document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel')); e.target.classList.add('sel'); selTurno(txt,h,f,h)}; cont.appendChild(div); c++;});
- }
+ for(let k=0;k<30&&c<20;k++){const f=new Date(); f.setDate(hoy.getDate()+k); if(!cfg[tipo].dias.includes(f.getDay())) continue; cfg[tipo].horas.forEach(h=>{const dias=['DOM','LUN','MAR','MIE','JUE','VIE','SAB']; const txt=dias[f.getDay()]+' '+f.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' '+h+'hs'; const div=document.createElement('div'); div.className='slot'; div.innerText=txt; div.onclick=(e)=>{document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel')); e.target.classList.add('sel'); selTurno(txt,h,f,h)}; cont.appendChild(div); c++;});}
 }
 function selTurno(txt,hora,fecha,h){turnoSel=txt; horaSel=hora; fechaObj=fecha; document.getElementById('p2').style.display='none'; document.getElementById('p3').style.display='block'; document.getElementById('resTurno').innerText=tipo+' - '+txt;}
-function irFicha(){if(!nombre.value||!whatsapp.value){alert('Nombre y WhatsApp');return;} document.getElementById('p3').style.display='none'; document.getElementById('p4').style.display='block';}
+function irFicha(){if(!nombre.value||!whatsapp.value){alert('Falta nombre/WA');return;} document.getElementById('p3').style.display='none'; document.getElementById('p4').style.display='block';}
 function finalizar(){
  document.getElementById('p4').style.display='none'; document.getElementById('p5').style.display='block';
- let diaTxt=''; if(tipo==='DOM'){diaTxt='DIA: DOMICILIO A CONVENIR';} else if(fechaObj){const dias=['DOMINGO','LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO']; diaTxt='DIA: '+dias[fechaObj.getDay()]+' '+fechaObj.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' a la noche';}
- let horaTxt='HORA: '+(horaSel||'A convenir');
- let lugarTxt = (tipo==='DOM')? 'LUGAR: DOMICILIO - A convenir' : 'LUGAR: 56 N° 1321 e/ 21 y 22';
- document.getElementById('pv_dia').innerText=diaTxt;
- document.getElementById('pv_hora').innerText=horaTxt;
- document.getElementById('pv_lugar').innerText=lugarTxt;
+ let diaTxt=tipo==='DOM'?'DIA: DOMICILIO A CONVENIR':''; if(fechaObj){const dias=['DOMINGO','LUNES','MARTES','MIERCOLES','JUEVES','VIERNES','SABADO']; diaTxt='DIA: '+dias[fechaObj.getDay()]+' '+fechaObj.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'})+' a la noche';}
+ document.getElementById('pv_dia').innerText=diaTxt; document.getElementById('pv_hora').innerText='HORA: '+(horaSel||'A convenir'); document.getElementById('pv_lugar').innerText=(tipo==='DOM')?'LUGAR: DOMICILIO - A convenir':'LUGAR: 56 N° 1321 e/ 21 y 22';
+ document.getElementById('admin').style.display=isAdmin?'block':'none';
 }
 function cambiarTurno(){document.getElementById('p5').style.display='none';document.getElementById('p2').style.display='block';}
-function suspenderTurno(){if(confirm('¿Suspender?')){const msg=`SUSPENDIDO SENDA: ${nombre.value} - ${turnoSel} - ${tipo}`; window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg)); location.reload();}}
+function suspenderTurno(){if(confirm('¿Suspender?')){const msg=`SUSPENDIDO SENDA: ${nombre.value} - ${turnoSel}`; window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg)); location.reload();}}
 function descargarPDF(){
- const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
- const W=210, H=297;
- doc.setFillColor(0,200,0); doc.rect(0,0,W,H,'F');
- doc.setFillColor(255,255,255); doc.rect(5,5,W-10,H-10,'F');
- doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(13,124,106);
- doc.text('SENDA',12,15); doc.text('COMUNIDAD',12,21);
- doc.setFontSize(11); doc.setTextColor(0,0,0); doc.setFont('helvetica','normal');
- doc.text('TURNO PARA ESTUDIO NEUROLOGICO',70,18);
+ const {jsPDF}=window.jspdf; const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'}); const W=210,H=297;
+ doc.setFillColor(0,200,0); doc.rect(0,0,W,H,'F'); doc.setFillColor(255,255,255); doc.rect(5,5,W-10,H-10,'F');
+ doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.setTextColor(13,124,106); doc.text('SENDA',12,15); doc.text('COMUNIDAD',12,21);
+ doc.setFontSize(11); doc.setTextColor(0,0,0); doc.setFont('helvetica','normal'); doc.text('TURNO PARA ESTUDIO NEUROLOGICO',70,18);
  function caja(y,txt){doc.setDrawColor(0,0,0); doc.setLineWidth(0.8); doc.rect(10,y,W-20,18); doc.setFont('helvetica','bold'); doc.setFontSize(16); doc.text(txt,15,y+12);}
- caja(30,document.getElementById('pv_dia').innerText);
- caja(52,document.getElementById('pv_hora').innerText);
- doc.setFontSize(12); doc.rect(10,74,W-20,14); doc.text(document.getElementById('pv_lugar').innerText,12,83);
- doc.setFontSize(9); doc.text('En caso de no poder concurrir avisar con anticipacion para cambiar el turno',15,95);
- doc.setDrawColor(255,0,0); doc.rect(10,100,W-20,45);
- doc.text('El dia del estudio:',12,106); doc.text('- el pelo lavado, pero seco, sin crema de enjuague ni otros productos',12,112);
- doc.text('- sin esmalte de uñas',12,118); doc.text('- privacion de sueño suficiente como para dormir en el consultorio',12,124);
- doc.setFont('helvetica','bold'); doc.text('- orden autorizada por obra social (IOMA NO SE AUTORIZA)',12,130);
- doc.setFont('helvetica','normal'); doc.setFontSize(8);
- doc.text('EL INFORME SERA ENVIADO DENTRO DE LOS 10 A 15 DIAS, EN FORMATO PDF,',10,155);
- doc.text('POR FAVOR IMPRIMIRLO POR SI SE BORRA DE LOS MENSAJES.',10,159);
- doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('TEL: 2215983871',130,170);
- doc.text('Paciente: '+document.getElementById('nombre').value,10,178);
- doc.save('TURNO_SENDA_'+document.getElementById('nombre').value.replace(/ /g,'_')+'.pdf');
+ caja(30,document.getElementById('pv_dia').innerText); caja(52,document.getElementById('pv_hora').innerText); doc.setFontSize(12); doc.rect(10,74,W-20,14); doc.text(document.getElementById('pv_lugar').innerText,12,83);
+ doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.text('En caso de no poder concurrir avisar con anticipacion para cambiar el turno',15,95);
+ doc.setDrawColor(255,0,0); doc.rect(10,100,W-20,45); doc.text('El dia del estudio:',12,106); doc.text('- el pelo lavado, pero seco, sin crema de enjuague ni otros productos',12,112); doc.text('- sin esmalte de uñas',12,118); doc.text('- privacion de sueño suficiente como para dormir en el consultorio',12,124); doc.setFont('helvetica','bold'); doc.text('- orden autorizada por obra social (IOMA NO SE AUTORIZA)',12,130);
+ doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.text('EL INFORME SERA ENVIADO DENTRO DE LOS 10 A 15 DIAS, EN FORMATO PDF,',10,155); doc.text('POR FAVOR IMPRIMIRLO POR SI SE BORRA DE LOS MENSAJES.',10,159);
+ doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.text('TEL: 2215983871',130,170); doc.text('Paciente: '+nombre.value,10,178);
+ doc.save('TURNO_SENDA_'+nombre.value.replace(/ /g,'_')+'.pdf');
 }
-function guardarAdmin(){
- const msg=`NUEVO TURNO SENDA\nNombre:${nombre.value}\nTipo:${tipo}\n${turnoSel}\nWA:${whatsapp.value}\nNºATI:${numATI.value}\nLugar:${lugarA.value}`;
- window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg));
- alert('Guardado. Orden por fecha: '+turnoSel);
-}
+function guardarAdmin(){const msg=`NUEVO TURNO SENDA\n${nombre.value}\n${turnoSel}\nWA:${whatsapp.value}\nNºATI:${numATI.value}\nProto:${proto.value}`; window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg)); alert('Guardado. Orden: '+turnoSel);}
 </script>
 </body>
 </html>
