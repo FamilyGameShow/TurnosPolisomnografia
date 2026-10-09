@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENDA</title>
+<style>
+body{font-family:sans-serif;max-width:600px;margin:0 auto;padding:12px;background:#f2f2f2}
+.card{background:#fff;border-radius:12px;padding:14px;margin:8px 0;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;font-weight:900;margin:6px 0;font-size:15px}
+.btn-p{background:#111;color:#fff}.btn-s{background:#ddd}
+.slot{padding:12px;border:1px solid #ccc;border-radius:8px;margin:6px 0;font-weight:700;background:#fff}
+.slot:active{background:#111;color:#fff}
+</style>
+</head>
+<body>
+<h3>SENDA COMUNIDAD</h3>
+
+<div id="paso1" class="card">
+<b>1. Qué estudio?</b>
+<button class="btn btn-p" onclick="mostrarFechas('DIU')">PSG Diurno/Nocturno<br><small>Lun Mar Jue 21/23/01/03hs</small></button>
+<button class="btn btn-p" onclick="mostrarFechas('RESP')">PSG Respiratoria<br><small>Lun Mar Vie Dom 23hs</small></button>
+<button class="btn btn-p" style="background:#0a7a42" onclick="mostrarFechas('DOM')">Domicilio Noche - A convenir</button>
+</div>
+
+<div id="paso2" class="card" style="display:none">
+<b id="tit">Fechas</b>
+<div id="lista"></div>
+<button class="btn btn-s" onclick="volver1()">← Volver</button>
+</div>
+
+<div id="paso3" class="card" style="display:none">
+<b>2. Reserva</b>
+<div id="turnoElegido" style="font-weight:800;margin:8px 0"></div>
+<input id="nombre" placeholder="Apellido y Nombre" style="width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box">
+<input id="wa" placeholder="WhatsApp" style="width:100%;padding:12px;margin:6px 0;border-radius:8px;border:1px solid #ccc;box-sizing:border-box">
+<button class="btn btn-p" onclick="reservar()">Reservar → Generar comprobante</button>
+</div>
+
+<div id="paso4" class="card" style="display:none">
+<div style="border:8px solid #00c800;padding:10px;background:#fff">
+<div style="display:flex;justify-content:space-between"><b style="color:#0d7c6a">SENDA<br>COMUNIDAD</b><small>TURNO ESTUDIO NEUROLOGICO</small></div>
+<div id="pv_dia" style="border:3px solid #000;padding:8px;margin:8px 0;text-align:center;font-weight:900;font-size:18px"></div>
+<div id="pv_hora" style="border:3px solid #000;padding:8px;margin:8px 0;text-align:center;font-weight:900;font-size:18px"></div>
+<div id="pv_lugar" style="border:3px solid #000;padding:8px;margin:8px 0;text-align:center;font-weight:900"></div>
+<div style="border:3px solid red;padding:8px;font-size:11px">El dia del estudio:<br>- pelo lavado seco sin crema<br>- sin esmalte<br>- privacion de sueño<br>- <b>orden autorizada (IOMA NO SE AUTORIZA)</b></div>
+<div style="font-size:10px;margin-top:8px">INFORME EN 10-15 DIAS PDF - TEL 2215983871</div>
+<div id="pv_pac" style="font-size:12px;margin-top:8px"></div>
+</div>
+<button class="btn btn-p" onclick="wp()">WhatsApp Equipo + PDF</button>
+<div onclick="let c=prompt('Clave:'); if(c=='1321')document.getElementById('adm').style.display='block'" style="font-size:11px;color:#aaa;text-align:center;margin-top:12px;text-decoration:underline">Ingreso equipo SENDA 1321</div>
+<div id="adm" style="display:none;margin-top:10px;border-top:2px dashed #000;padding-top:10px">
+<select id="quien" style="width:100%;padding:8px"><option>SEBA J</option><option>SABRINA</option><option>FITO</option><option>SEBA D</option><option>SEBA SECRE</option><option>JULIETA</option></select>
+<input id="ati" placeholder="Nº ATI" style="width:100%;padding:8px;margin:6px 0">
+<button class="btn btn-p" onclick="guardarEquipo()">Guardar y avisar</button>
+</div>
+</div>
+
+<script>
+let turnoTxt='', horaTxt='', tipoSel='';
+function volver1(){document.getElementById('paso2').style.display='none'; document.getElementById('paso1').style.display='block';}
+function mostrarFechas(t){
+ tipoSel=t;
+ document.getElementById('paso1').style.display='none';
+ document.getElementById('paso2').style.display='block';
+ let cont=document.getElementById('lista');
+ cont.innerHTML='Cargando...';
+ document.getElementById('tit').innerText='Fechas - '+t;
+ setTimeout(function(){
+  cont.innerHTML='';
+  if(t=='DOM'){
+   let d=document.createElement('div'); d.className='slot'; d.innerText='DOMICILIO - A CONVENIR - A COORDINAR';
+   d.onclick=function(){ elegir('DOMICILIO A CONVENIR','A convenir'); };
+   cont.appendChild(d); return;
+  }
+  let hoy=new Date(); let cant=0;
+  for(let k=0;k<50 && cant<30;k++){
+   let f=new Date(); f.setDate(hoy.getDate()+k);
+   let dow=f.getDay();
+   let ok=false;
+   if(t=='DIU' && (dow==1||dow==2||dow==4)) ok=true;
+   if(t=='RESP' && (dow==1||dow==2||dow==5||dow==0)) ok=true;
+   if(!ok) continue;
+   let horas = (t=='DIU')?['21:00','23:00','01:00','03:00']:['23:00'];
+   for(let hi=0;hi<horas.length;hi++){
+    let h=horas[hi];
+    let txt = f.toLocaleDateString('es-AR',{weekday:'short',day:'2-digit',month:'2-digit'})+' '+h+'hs';
+    let div=document.createElement('div');
+    div.className='slot';
+    div.innerText=txt.toUpperCase();
+    let finalTxt=txt;
+    let finalH=h;
+    div.onclick=function(){ elegir(finalTxt,finalH); };
+    cont.appendChild(div);
+    cant++; if(cant>=30) break;
+   }
+  }
+ },100);
+}
+function elegir(txt,h){
+ turnoTxt=txt; horaTxt=h;
+ document.getElementById('paso2').style.display='none';
+ document.getElementById('paso3').style.display='block';
+ document.getElementById('turnoElegido').innerText=txt.toUpperCase();
+}
+function reservar(){
+ let n=document.getElementById('nombre').value;
+ let w=document.getElementById('wa').value;
+ if(!n){alert('Falta nombre');return;}
+ document.getElementById('paso3').style.display='none';
+ document.getElementById('paso4').style.display='block';
+ document.getElementById('pv_dia').innerText='DIA: '+turnoTxt.toUpperCase();
+ document.getElementById('pv_hora').innerText='HORA: '+horaTxt;
+ document.getElementById('pv_lugar').innerText=(tipoSel=='DOM')?'LUGAR: DOMICILIO':'LUGAR: 56 N°1321 e/21 y 22';
+ document.getElementById('pv_pac').innerText='Paciente: '+n+' - WA:'+w;
+}
+function wp(){
+ let n=document.getElementById('nombre').value;
+ let w=document.getElementById('wa').value;
+ let msg='NUEVO TURNO SENDA '+tipoSel+' '+turnoTxt+' PAC:'+n+' WA:'+w;
+ window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg));
+}
+function guardarEquipo(){
+ let n=document.getElementById('nombre').value;
+ let q=document.getElementById('quien').value;
+ let a=document.getElementById('ati').value;
+ let msg='SENDA EQUIPO '+q+' '+turnoTxt+' PAC:'+n+' ATI:'+a;
+ window.open('https://wa.me/5492215983871?text='+encodeURIComponent(msg));
+}
+</script>
+</body>
+</html>
