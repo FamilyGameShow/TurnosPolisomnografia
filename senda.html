@@ -1,118 +1,89 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SENDA - Demo 1376</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SENDA - Flujo Completo 1376</title>
 <style>
-:root{--blue:#1e3a8a;--pink:#ffe4e6;--green-dark:#064e3b;--green-light:#d1fae5}
 body{margin:0;font-family:system-ui;background:#f1f5f9}
-.top{background:#1e3a8a;color:white;padding:14px 20px;display:flex;justify-content:space-between}
-.tabs{display:flex;gap:8px;padding:12px 20px;background:white}
-.tab{padding:8px 16px;border-radius:20px;border:1px solid #e2e8f0;cursor:pointer}
+.top{background:#1e3a8a;color:white;padding:14px 20px}
+.tabs{display:flex;gap:6px;padding:10px;background:white;overflow:auto}
+.tab{padding:8px 12px;border-radius:20px;border:1px solid #e2e8f0;cursor:pointer;white-space:nowrap;font-size:13px}
 .tab.active{background:#1e3a8a;color:white}
-.content{padding:20px;max-width:1100px;margin:0 auto}
-.card{background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);margin-bottom:16px}
+.content{padding:16px;max-width:1100px;margin:0 auto}
+.card{background:white;border-radius:12px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.08);margin-bottom:14px}
 input,select,textarea{width:100%;padding:10px;border:1px solid #cbd5e0;border-radius:8px;box-sizing:border-box;margin:4px 0}
-.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-.badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:bold;display:inline-block}
-.fito{background:#fecdd3;color:#881337}
-.sabrina{background:#064e3b;color:white}
-.fito-sabri{background:#a7f3d0;color:#064e3b}
-.btn{background:#2563eb;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:bold;cursor:pointer}
-.btn-ghost{background:white;border:1px solid #cbd5e0;padding:10px 16px;border-radius:8px;cursor:pointer}
-table{width:100%;border-collapse:collapse}
-th{font-size:11px;color:#64748b;text-align:left;padding:8px}
-td{padding:10px;border-top:1px solid #f1f5f9;font-size:14px}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.btn{background:#25D366;color:white;border:none;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+.btn-blue{background:#2563eb;color:white;border:none;padding:10px 16px;border-radius:8px;font-weight:bold;cursor:pointer}
+.badge{padding:3px 10px;border-radius:12px;font-size:12px;font-weight:bold}
+.whatsapp{background:#dcf8c6;border:1px solid #25D366;padding:10px;border-radius:10px;margin-top:10px;font-size:13px}
 </style>
 </head>
 <body>
-<div class="top"><div><b>SENDA</b> • Demo 1376 / 1376/02 / 1376/03</div><div style="font-size:12px">Vos • Admin</div></div>
+<div class="top"><b>SENDA</b> • Flujo: Ficha paciente → Turno → Estudio 1376/02/03 → Informe → WhatsApp</div>
 <div class="tabs">
-<div class="tab active" onclick="show(0)">1. Lista Excel con colores</div>
-<div class="tab" onclick="show(1)">2. Nuevo Paciente - Checklist</div>
-<div class="tab" onclick="show(2)">3. Informe Sabrina/Fito</div>
+<div class="tab active" onclick="show(0)">1. Ficha que llena PACIENTE</div>
+<div class="tab" onclick="show(1)">2. Lista Excel colores</div>
+<div class="tab" onclick="show(2)">3. Nuevo + Checklist</div>
+<div class="tab" onclick="show(3)">4. Informe + WhatsApp</div>
 </div>
 <div class="content">
+<!-- FICHA PACIENTE -->
 <div id="t0">
 <div class="card">
-<h3>Lista igual a tu foto Excel</h3>
-<table>
-<tr><th>PACIENTE</th><th>Nº</th><th>INFORMA</th><th>ESTADO</th><th>ACCIÓN</th></tr>
-<tr style="background:#ffe4e6"><td>RIMARO M. 56a</td><td>1376</td><td><span class="badge sabrina">SABRINA</span></td><td>✓ SAHOS LEVE</td><td><button class="btn-ghost" onclick="show(2)">Ver</button></td></tr>
-<tr style="background:#d1fae5"><td>RIMARO M. 56a</td><td>1376/02</td><td><span class="badge fito-sabri">FITO-SABRI</span></td><td>Por informar</td><td><button class="btn-ghost" onclick="show(2)">Informar</button></td></tr>
-<tr style="background:#ffe4e6"><td>GAGGERO V. 3m</td><td>1377</td><td><span class="badge fito">FITO</span></td><td>EEG por informar</td><td><button class="btn-ghost">Informar</button></td></tr>
-<tr style="background:#064e3b;color:white"><td>LOPEZ J. 55a</td><td>1378</td><td><span class="badge" style="background:white;color:#064e3b">SABRINA</span></td><td>Falta parte</td><td><button class="btn-ghost">Completar</button></td></tr>
-</table>
-<p style="font-size:12px;color:#64748b">Rosa=FITO • Verde oscuro=SABRINA • Verde claro=FITO-SABRI (igual a tu foto)</p>
+<h3>Link para mandar por WhatsApp al paciente</h3>
+<p style="font-size:12px;color:#64748b">Vos le mandás: <b>senda.com/ficha</b> - El paciente lo abre en el celu y lo llena</p>
+<label>Nombre y Apellido</label><input placeholder="Ej: RIMARO Mariano">
+<div class="row"><div><label>DNI</label><input placeholder="DNI"></div><div><label>Edad</label><input placeholder="56"></div><div><label>Fecha Nac.</label><input type="date"></div></div>
+<div class="row"><div><label>Peso kg</label><input placeholder="85"></div><div><label>Talla cm</label><input placeholder="175"></div><div><label>IMC (auto)</label><input placeholder="27.7" disabled></div></div>
+<div class="row"><div><label>Obra Social</label><input placeholder="OSDE"></div><div><label>Teléfono</label><input placeholder="WhatsApp"></div><div><label>Mail</label><input placeholder="mail"></div></div>
+<label>Motivo consulta / Medicación / Antecedentes</label><textarea rows="3" placeholder="Ronquidos, pausas, HTA, toma enalapril..."></textarea>
+<label>¿Tiene estudios previos? Nº</label><input placeholder="Si es control poner 1376 → sistema genera 1376/02 automático">
+<button class="btn" onclick="alert('WhatsApp a VOS: Nuevo paciente RIMARO M. completó ficha. Asignale Nº y turno'); show(1)">Enviar ficha (simula paciente)</button>
+<div class="whatsapp">📱 WhatsApp que te llega a vos: <b>"Nuevo paciente: RIMARO M. 56a - Peso 85kg - OSDE - Motivo: ronquidos. Ficha completa. Asignar Nº y turno"</b></div>
 </div>
 </div>
+<!-- LISTA -->
 <div id="t1" style="display:none">
 <div class="card">
-<h3>Nuevo estudio - tu tablita OTROS / SI / NO</h3>
-<div class="row">
-<div><label>Paciente</label><input id="pac" placeholder="Ej: RIMARO M."></div>
-<div><label>Nº base</label><input id="num" value="1376"><small style="color:#2563eb">Auto: 1376 → 1376/02 → 1376/03</small></div>
-<div><label>Informa</label><select id="inf"><option>FITO</option><option selected>SABRINA</option><option>FITO-SABRI</option></select></div>
-</div>
-<h4>Checklist técnico:</h4>
-<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;font-size:13px">
-<label><input type="checkbox" checked> EKG</label><label><input type="checkbox" checked> Oximetría</label><label><input type="checkbox"> EMG</label><label><input type="checkbox"> EOG</label>
-<label><input type="checkbox" checked> Tórax</label><label><input type="checkbox"> Abdomen</label><label><input type="checkbox"> Ronquidos</label><label><input type="checkbox"> Foto</label>
-<label><input type="checkbox"> Urgente</label><label><input type="checkbox"> F.A.</label><label><input type="checkbox"> Hipernea</label><label><input type="checkbox"> Peso/Talla</label>
-</div>
-<h4>Si es NIÑOS:</h4>
-<div class="row"><div><input placeholder="Edad gestacional"></div><div><input placeholder="Peso al nacer"></div><div><input placeholder="Mail padres"></div></div>
-<button class="btn" style="margin-top:12px" onclick="agregar()">Guardar como 1376/02 o /03 automático</button>
-<div id="msg" style="margin-top:12px;background:#dbeafe;padding:10px;border-radius:8px;display:none"></div>
-<table id="tabla" style="margin-top:16px"><tr><th>PACIENTE</th><th>Nº</th><th>INFORMA</th></tr></table>
+<h3>Lista para vos - colores igual a tu Excel</h3>
+<table style="width:100%;font-size:13px"><tr><th>PACIENTE</th><th>Nº</th><th>INFORMA</th><th>TURNO</th><th>ESTADO</th></tr>
+<tr style="background:#e0f2fe"><td>RIMARO M.</td><td>-</td><td>-</td><td>Esperando turno</td><td>Ficha recibida</td></tr>
+<tr style="background:#ffe4e6"><td>RIMARO M.</td><td>1376</td><td>SABRINA</td><td>02/09 coloc</td><td>Completo SAHOS LEVE</td></tr>
+<tr style="background:#d1fae5"><td>RIMARO M.</td><td>1376/02</td><td>FITO-SABRI</td><td>15/10 coloc</td><td>Por informar</td></tr>
+</table>
+<div class="whatsapp">📱 WhatsApp que te llega: <b>"Estudio 1376/02 listo para informar. Checklist: EKG OK, Oximetría OK, Tórax OK"</b></div>
 </div>
 </div>
+<!-- NUEVO -->
 <div id="t2" style="display:none">
 <div class="card">
-<h3>Informe SABRINA / FITO-SABRI</h3>
-<p style="font-size:12px">Paciente: RIMARO M. • Nº 1376/02 • Sensores: EKG, Oximetría, Tórax (viene del checklist)</p>
-<div class="row">
-<div><label>TTR (min)</label><input value="336"></div>
-<div><label>TTS (min)</label><input value="321"></div>
-<div><label>Eficiencia</label><input value="95.4%"></div>
+<h3>Asignar Nº y Checklist técnico</h3>
+<div class="row"><div><label>Paciente</label><input value="RIMARO M."></div><div><label>Nº base (auto /02 /03)</label><input id="num" value="1376"></div><div><label>Turno colocación</label><input type="date"></div></div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;font-size:12px;margin-top:10px">
+<label><input type="checkbox" checked> EKG</label><label><input type="checkbox" checked> Oximetría</label><label><input type="checkbox"> EMG</label><label><input type="checkbox"> EOG</label><label><input type="checkbox" checked> Tórax</label><label><input type="checkbox"> Abdomen</label><label><input type="checkbox"> Ronquidos</label><label><input type="checkbox"> Foto</label>
 </div>
-<div class="row">
-<div><label>IAC /h</label><input value="0.56"></div>
-<div><label>IAHO /h</label><input value="8.78"></div>
-<div><label>IPR global</label><input value="9.34"></div>
+<button class="btn-blue" style="margin-top:10px" onclick="alert('Guardado 1376/02 con checklist. WhatsApp a vos: Listo para informar')">Guardar y avisar por WhatsApp</button>
 </div>
-<div class="row">
-<div><label>Sat prom %</label><input value="92"></div>
-<div><label>Sat min %</label><input value="83"></div>
-<div><label>Desaturaciones</label><input value="48 (ID 8.6)"></div>
 </div>
-<label>Conclusión</label><textarea rows="3">POLISOMNOGRAFIA: SAHOS LEVE en supino. Buena saturación prom 92%, mínima 83%. 48 desaturaciones.</textarea>
-<div style="margin-top:12px;display:flex;gap:8px">
-<button class="btn" onclick="alert('PDF generado con firma Fito + Sabrina - Nº 1376/02')">Generar PDF con 2 firmas</button>
-<button class="btn-ghost">Guardar borrador</button>
-</div>
+<!-- INFORME -->
+<div id="t3" style="display:none">
+<div class="card">
+<h3>Informe + aviso WhatsApp</h3>
+<div class="row"><div><input value="336" placeholder="TTR"><small>TTR</small></div><div><input value="321" placeholder="TTS"><small>TTS</small></div><div><input value="92/83"><small>Sat prom/min</small></div></div>
+<textarea rows="2">SAHOS LEVE - 48 desat - IAHO 8.78</textarea>
+<button class="btn" onclick="alert('WhatsApp a VOS: Informe 1376/02 COMPLETO listo para enviar a paciente/medico')">Generar PDF y avisar por WhatsApp</button>
+<div class="whatsapp">📱 WhatsApp que te llega a vos: <b>"Informe 1376/02 RIMARO listo. SAHOS LEVE. PDF generado con firma"</b><br>Después vos reenvías al paciente/médico</div>
 </div>
 </div>
 </div>
 <script>
-let estudios={'RIMARO M.':['1376']};
 function show(i){
 document.getElementById('t0').style.display=i==0?'block':'none';
 document.getElementById('t1').style.display=i==1?'block':'none';
 document.getElementById('t2').style.display=i==2?'block':'none';
+document.getElementById('t3').style.display=i==3?'block':'none';
 document.querySelectorAll('.tab').forEach((t,idx)=>t.classList.toggle('active',idx==i));
-}
-function agregar(){
-const pac=document.getElementById('pac').value.toUpperCase()||'RIMARO M.';
-const numBase=document.getElementById('num').value||'1376';
-const inf=document.getElementById('inf').value;
-let nuevo=numBase.split('/')[0];
-if(estudios[pac]){nuevo=nuevo+'/'+String(estudios[pac].length+1).padStart(2,'0'); estudios[pac].push(nuevo)} else {estudios[pac]=[nuevo]}
-document.getElementById('msg').style.display='block';
-document.getElementById('msg').innerHTML='✓ Creado <b>'+pac+' - '+nuevo+'</b> → 1376 luego 1376/02 luego 1376/03 como pediste';
-const tabla=document.getElementById('tabla');
-const tr=document.createElement('tr'); tr.innerHTML='<td>'+pac+'</td><td>'+nuevo+'</td><td>'+inf+'</td>'; tabla.appendChild(tr);
 }
 </script>
 </body>
